@@ -51,8 +51,8 @@ Toutes les tâches de code se vérifient sur un Mac avec `./build.sh --dev`, `./
 - [ ] 4.5 Brancher le cycle de vie : `FeatureRuntime.bindings`, sink Accessibilité et `suspend()` à la fermeture dans `AppDelegate`, `SelfUninstall.suspendInputInterceptors`, `CleaningModeManager` ; vérifier sur Mac que l'octroi d'Accessibilité démarre les gestes sans redémarrage et que le mode nettoyage les coupe.
   - État : branchements faits ; essai sur Mac requis.
 
-- [ ] 4.6 Lire la frappe récente dans `.hidSystemState` pour que le raccourci posté par un geste ne fasse pas rejeter le suivant ; vérifier sur Mac qu'une série rapide de balayages mappés sur un raccourci passe en entier et qu'un contact juste après une vraie frappe reste rejeté.
-  - État : corrigé après constat dans les logs (2 balayages sur 7 rejetés avec `sinceKey` 0,04 et 0,28 s sans frappe) ; essai sur Mac requis.
+- [ ] 4.6 Ne pas compter comme frappe le raccourci posté par l'action du geste précédent (`OwnKeyEvent.notePosted`, `TrackpadGestureSupport.secondsSinceTyping`) et ne pas attendre le relâchement de modificateurs pour un geste (`Context.waitsForModifierRelease`) ; vérifier sur Mac qu'une série rapide de balayages mappés sur un raccourci passe en entier, sans retard, et qu'un contact juste après une vraie frappe reste rejeté.
+  - État : première correction (`.hidSystemState`) invalidée par les logs, remplacée ; rejet après une vraie frappe vérifié sur Mac (8 contacts rejetés entre 0,20 et 0,48 s, accepté à 0,71 s) ; série rapide à revérifier.
 
 ## 5. Chaînes et réglages
 
