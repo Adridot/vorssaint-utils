@@ -3409,6 +3409,7 @@ enum PointerInputFeatureTests {
                          "Sources/Vorssaint/Services/Finder/FinderCutPaste.swift",
                          "Sources/Vorssaint/Services/Finder/FinderRenameService.swift",
                          "Sources/Vorssaint/Services/KeyboardDebounce/KeyboardDebounceService.swift",
+                         "Sources/Vorssaint/Services/Trackpad/TrackpadGestureService.swift",
                          "Sources/Vorssaint/Services/SuperKey/SuperKeyService.swift",
                          "Sources/Vorssaint/Services/ShortcutRecordingTap.swift",
                          "Sources/Vorssaint/Services/Switcher/AppSwitcher.swift",
@@ -3440,6 +3441,7 @@ enum PointerInputFeatureTests {
             if tapOwner.contains("MouseNavigation")
                 || tapOwner.contains("MouseButtonShortcut")
                 || tapOwner.contains("MiddleClick")
+                || tapOwner.contains("TrackpadGesture")
                 || tapOwner.contains("QuitProtection")
                 || tapOwner.contains("RadialMenu")
                 || tapOwner.contains("ShortcutRecordingTap") {
@@ -3466,7 +3468,8 @@ enum PointerInputFeatureTests {
         suite.expect(pointerTapSource.contains("qualityOfService = .userInteractive"),
                "the pointer thread is scheduled as input work")
         for pointerTapOwner in ["Sources/Vorssaint/Services/ScrollInverter.swift",
-                                "Sources/Vorssaint/Services/MiddleClick/MiddleClickService.swift"] {
+                                "Sources/Vorssaint/Services/MiddleClick/MiddleClickService.swift",
+                                "Sources/Vorssaint/Services/Trackpad/TrackpadGestureService.swift"] {
             let source = (try? String(contentsOfFile: pointerTapOwner, encoding: .utf8)) ?? ""
             let code = source.components(separatedBy: "\n")
                 .filter { !$0.trimmingCharacters(in: .whitespaces).hasPrefix("//") }
