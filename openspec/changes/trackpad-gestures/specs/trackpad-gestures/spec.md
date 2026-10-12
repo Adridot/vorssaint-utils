@@ -48,11 +48,11 @@ Le système DOIT reconnaître, à la levée de tous les doigts, au plus un geste
 - **THEN** le geste « balayage 3 doigts vers la droite » est émis une fois à la levée des doigts
 
 #### Scenario: Pincement
-- **WHEN** cinq doigts se rapprochent au-delà du seuil d'écartement tandis que leur centre bouge peu
+- **WHEN** cinq doigts se rapprochent au-delà du seuil d'écartement tandis que leur centre se déplace moins que l'écartement ne change
 - **THEN** le geste « pincement 5 doigts fermer » est émis une fois à la levée des doigts
 
 #### Scenario: Contact ambigu
-- **WHEN** un contact dépasse à la fois le seuil de balayage et le seuil de pincement, ou qu'un doigt supplémentaire se pose en cours de geste
+- **WHEN** un contact se déplace et change d'écartement dans des proportions voisines, sans que l'un l'emporte nettement sur l'autre, ou qu'un doigt supplémentaire se pose en cours de geste
 - **THEN** aucun geste n'est émis pour ce contact
 
 ### Requirement: Rejet des faux positifs
