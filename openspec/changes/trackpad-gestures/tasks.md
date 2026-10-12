@@ -63,7 +63,7 @@ Toutes les tâches de code se vérifient sur un Mac avec `./build.sh --dev`, `./
 - [ ] 5.3 Créer `UI/Settings/TrackpadGestureSettings.swift` (carte dans `MouseSettings`, interrupteur avec demande d'Accessibilité, grille des gestes avec badge d'état, picker, avertissements, `MouseExceptionsList(scope: .trackpadGestures)`), ancre `SettingsSectionAnchor.trackpadGestures`, légende et `isOn` dans `MouseSettings`, mots-clés dans `SettingsDirectory` ; décider carte ou page dédiée sur capture ; vérifier sur Mac le rendu dans les langues longues (de, ru, pt-BR).
   - État : carte implémentée ; rendu à vérifier sur Mac dans les langues longues.
 - [ ] 5.4 Afficher les actions indisponibles (outil désinstallé, app déplacée, raccourci système désactivé) grisées avec bouton vers Features ; vérifier sur Mac en désinstallant l'outil mappé.
-  - État : implémenté ; essai sur Mac requis.
+  - État : affichage vérifié sur Mac (outil désinstallé avec bouton Fonctionnalités, app absente). Défaut trouvé à l'essai : le geste mappé sur une app absente faisait afficher l'alerte macOS « Le fichier est introuvable » ; le service ignore désormais une action indisponible (`TriggerActionRunner.unavailability`, la même réponse que les réglages).
 - [x] 5.5 Ajouter la ligne de la feature dans `docs/PERMISSIONS.md` et vérifier le lien et le diff de la doc.
 
 ## 6. Vérification d'intégration sur Mac
