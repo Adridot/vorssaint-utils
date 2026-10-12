@@ -32,8 +32,8 @@ Toutes les tâches de code se vérifient sur un Mac avec `./build.sh --dev`, `./
   - État : `TrackpadGestureMappingSupport.swift` + `Tests/TrackpadGestureMappingTests.swift`, 11 vérifications OK sous Linux contre des doublures des types AppKit ; à relancer sur Mac.
 - [ ] 3.3 Brancher la navigation sur `SpaceWindowBridge.spaceShortcut/overviewShortcut/pressSpaceShortcut` et exposer `isAvailable` par action (raccourci système actif) ; vérifier sur Mac Space gauche/droite, Mission Control, App Exposé, et le cas raccourci système désactivé.
   - État : implémenté via `SpaceWindowBridge` ; essai sur Mac requis.
-- [ ] 3.4 Ajouter `commandBar` et `switcher` à `RadialMenuTool` avec une entrée publique `AppSwitcher.shared.togglePanel()` ; mettre à jour les tests du menu radial qui épinglent la liste des outils ; vérifier sur Mac depuis le menu radial.
-  - État : Command Bar ajoutée. Sélecteur d'apps NON fait : il demande un mode de session persistant dans `AppSwitcher` (voir design, Open Questions). Décision du porteur requise.
+- [ ] 3.4 Ajouter `commandBar` à `RadialMenuTool` ; mettre à jour les tests du menu radial qui épinglent la liste des outils ; vérifier sur Mac depuis le menu radial et depuis un geste.
+  - État : Command Bar ajoutée. Le sélecteur d'apps est retiré du périmètre (décision du porteur). Essai sur Mac requis.
 
 ## 4. Feature, préférences, cycle de vie
 

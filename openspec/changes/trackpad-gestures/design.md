@@ -54,7 +54,7 @@ Le mappage persiste en `Data` JSON sous `DefaultsKey.trackpadGestureMappings` : 
 
 Les exécuteurs `run(_ item:)`, `run(_ tool:)`, `run(_ toggle:)`, `run(_ layout:)`, `postShortcut`, `postAuxKey`, `postWhenModifiersReleased` quittent `RadialMenuService` pour `Services/TriggerActionRunner.swift` (enum statique, main thread). `RadialMenuService` l'appelle. La navigation passe par `SpaceWindowBridge`. `RadialMenuTool` gagne `commandBar`, ce qui bénéficie aussi au menu radial.
 
-Révisé à l'implémentation : le sélecteur d'apps n'est pas ajouté. Sa session est liée à un raccourci maintenu et se valide au relâchement des modificateurs ; l'ouvrir depuis un geste demande un mode de session persistant dans `AppSwitcher`, qui dépasse une simple entrée publique. Décision en attente du porteur du projet (voir Open Questions).
+Révisé à l'implémentation : le sélecteur d'apps n'est pas ajouté. Sa session est liée à un raccourci maintenu et se valide au relâchement des modificateurs ; l'ouvrir depuis un geste demande un mode de session persistant dans `AppSwitcher`, qui dépasse une simple entrée publique. Décision du porteur du projet : le sélecteur d'apps sort du périmètre de ce change ; il pourra faire l'objet d'un change séparé qui ajoute un mode de session persistant.
 
 Alternative : un nouvel enum d'actions propre aux gestes. Rejetée : duplication du sélecteur d'action et de la validation déjà écrits pour le menu radial.
 
@@ -97,7 +97,6 @@ Tout ce qui décide est pur : `TrackpadGestureSupport` (reconnaissance, réserva
 
 ## Open Questions
 
-- Sélecteur d'apps depuis un geste : ajouter un mode de session persistant à `AppSwitcher`, ou retirer le sélecteur du périmètre de la spec `trackpad-gesture-actions`. Bloque la tâche 3.4.
 
 - Carte dans la page Souris ou page dédiée : tranché à l'implémentation sur capture d'écran (D8), sans effet sur specs ni tâches.
 - Valeurs finales des seuils de balayage et de pincement : calibrées sur Mac (D2).

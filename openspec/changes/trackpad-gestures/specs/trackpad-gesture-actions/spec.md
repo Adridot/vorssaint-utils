@@ -43,7 +43,7 @@ L'action disposition DOIT appliquer la disposition choisie à la fenêtre au pre
 - **THEN** la fenêtre au premier plan occupe la moitié gauche de son écran
 
 ### Requirement: Outils et bascules Vorssaint
-L'action outil DOIT ouvrir ou basculer l'outil choisi (y compris la Command Bar et le sélecteur d'apps) et l'action bascule rapide DOIT appliquer la bascule choisie, avec le même effet que depuis le menu radial.
+L'action outil DOIT ouvrir ou basculer l'outil choisi (y compris la Command Bar) et l'action bascule rapide DOIT appliquer la bascule choisie, avec le même effet que depuis le menu radial. Le sélecteur d'apps n'est pas un outil proposé : sa session dépend d'un raccourci maintenu.
 
 #### Scenario: Presse-papiers
 - **WHEN** un geste mappé sur l'historique du presse-papiers est effectué

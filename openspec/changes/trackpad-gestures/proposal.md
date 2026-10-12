@@ -13,7 +13,7 @@ Les utilisateurs de BetterTouchTool ou Multitouch veulent déclencher des action
 - Liste d'apps exclues (nouveau scope d'exceptions souris), réglages sauvegardés et exportés avec les autres préférences, 15 langues.
 - Refactor interne : extraction du pont MultitouchSupport du service de clic du milieu vers un service de contacts partagé, et des exécuteurs d'actions du menu radial vers un exécuteur partagé. Le clic du milieu et le tap 4 doigts du menu radial gardent exactement leur comportement.
 
-Hors périmètre de ce change : mappages par application, modificateurs requis, rotation, tip-tap, coins, scripts shell, retour haptique, répétition continue pendant le geste.
+Hors périmètre de ce change : ouverture du sélecteur d'apps depuis un geste, mappages par application, modificateurs requis, rotation, tip-tap, coins, scripts shell, retour haptique, répétition continue pendant le geste.
 
 ## Capabilities
 
