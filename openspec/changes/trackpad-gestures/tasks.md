@@ -35,6 +35,9 @@ Toutes les tâches de code se vérifient sur un Mac avec `./build.sh --dev`, `./
 - [ ] 3.4 Ajouter `commandBar` à `RadialMenuTool` ; mettre à jour les tests du menu radial qui épinglent la liste des outils ; vérifier sur Mac depuis le menu radial et depuis un geste.
   - État : Command Bar ajoutée. Le sélecteur d'apps est retiré du périmètre (décision du porteur). Essai sur Mac requis.
 
+- [ ] 3.5 Ajouter `TriggerAction.backForward` (Précédent, Suivant) : `MouseNavigationService.navigate(_:)`, décision pure `MouseNavigationSupport.sendsSideButton` et ses tests, entrées du menu d'action ; vérifier sur Mac dans Safari ou le Finder (commande de menu) et dans un navigateur de la famille Firefox (bouton latéral).
+  - État : implémenté après le premier essai sur Mac, suite `pointer-input` verte ; essai dans les navigateurs requis.
+
 ## 4. Feature, préférences, cycle de vie
 
 - [ ] 4.1 Ajouter `AppFeature.trackpadGestures` (groupe `.mouseKeyboard`, symbole `hand.draw`, `enabledKeys` `[trackpadGesturesEnabled]`, permissions `[.accessibility]`, `installedByDefault` false, `energyProfile .mouse`, destination `.mouse` avec ancre `.trackpadGestures`, titre et description du hub) et mettre à jour `Tests/FeatureCatalogTests.swift` (78 features, ordre des raw values, ensemble installé par défaut) et `Tests/UpdateFeatureTests.swift` ; vérifier `./build.sh --test-suite=features`.
@@ -47,6 +50,9 @@ Toutes les tâches de code se vérifient sur un Mac avec `./build.sh --dev`, `./
   - État : reconnaissance de tap retirée de `MiddleClickService`, routage par réservations. Essai sur Mac requis (priorités clic du milieu, menu radial, gestes).
 - [ ] 4.5 Brancher le cycle de vie : `FeatureRuntime.bindings`, sink Accessibilité et `suspend()` à la fermeture dans `AppDelegate`, `SelfUninstall.suspendInputInterceptors`, `CleaningModeManager` ; vérifier sur Mac que l'octroi d'Accessibilité démarre les gestes sans redémarrage et que le mode nettoyage les coupe.
   - État : branchements faits ; essai sur Mac requis.
+
+- [ ] 4.6 Lire la frappe récente dans `.hidSystemState` pour que le raccourci posté par un geste ne fasse pas rejeter le suivant ; vérifier sur Mac qu'une série rapide de balayages mappés sur un raccourci passe en entier et qu'un contact juste après une vraie frappe reste rejeté.
+  - État : corrigé après constat dans les logs (2 balayages sur 7 rejetés avec `sinceKey` 0,04 et 0,28 s sans frappe) ; essai sur Mac requis.
 
 ## 5. Chaînes et réglages
 

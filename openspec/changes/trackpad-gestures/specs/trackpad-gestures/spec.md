@@ -66,6 +66,10 @@ Le système NE DOIT PAS émettre de geste lorsqu'un bouton du trackpad est press
 - **WHEN** un contact à quatre doigts suit une frappe clavier de moins de 0,5 s
 - **THEN** aucun geste n'est émis
 
+#### Scenario: Gestes enchaînés
+- **WHEN** deux gestes mappés sur un raccourci clavier se suivent à moins de 0,5 s
+- **THEN** les deux actions sont exécutées : le raccourci envoyé par le premier n'est pas compté comme une frappe
+
 #### Scenario: Données de touche inattendues
 - **WHEN** une position lue sort de la plage normalisée du trackpad
 - **THEN** le contact est ignoré en entier plutôt que de produire un geste erroné

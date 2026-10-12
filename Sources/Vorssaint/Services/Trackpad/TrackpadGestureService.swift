@@ -121,8 +121,11 @@ final class TrackpadGestureService: ObservableObject {
         guard var contact = finished else { return }
         // Typing and clicking are read from the system's own event record
         // once the fingers lift, so no event tap is needed to notice them.
+        // Typing comes from the hardware record: the session's also counts
+        // the shortcut the previous gesture posted, which would drop every
+        // second swipe of a quick series as if the user were typing.
         contact.secondsSinceLastKeyDown = CGEventSource.secondsSinceLastEventType(
-            .combinedSessionState, eventType: .keyDown)
+            .hidSystemState, eventType: .keyDown)
         let sinceClick = [CGEventType.leftMouseDown, .rightMouseDown, .otherMouseDown].map {
             CGEventSource.secondsSinceLastEventType(.combinedSessionState, eventType: $0)
         }.min() ?? .infinity

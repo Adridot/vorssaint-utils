@@ -56,6 +56,8 @@ Les exécuteurs `run(_ item:)`, `run(_ tool:)`, `run(_ toggle:)`, `run(_ layout:
 
 Révisé à l'implémentation : le sélecteur d'apps n'est pas ajouté. Sa session est liée à un raccourci maintenu et se valide au relâchement des modificateurs ; l'ouvrir depuis un geste demande un mode de session persistant dans `AppSwitcher`, qui dépasse une simple entrée publique. Décision du porteur du projet : le sélecteur d'apps sort du périmètre de ce change ; il pourra faire l'objet d'un change séparé qui ajoute un mode de session persistant.
 
+Révisé après essai sur Mac : `TriggerAction` gagne `case backForward(MouseNavigationDirection)` (Précédent, Suivant), demandé dès le premier essai pour naviguer dans un navigateur. `MouseNavigationService.navigate(_:)` réutilise la recherche de menu des boutons latéraux (commande de l'app au premier plan, touche résolue par `MouseNavigationKeys` pour les claviers qui ne tapent pas les crochets). Quand les menus répondent en entier sans la commande (famille Firefox, dont Zen), le service poste le bouton latéral 3 ou 4 à la fenêtre sous le pointeur, décision pure `MouseNavigationSupport.sendsSideButton`. Un raccourci ⌘[ mappé à la main ne convenait pas : il n'est pas tapable sur un clavier AZERTY. Les libellés viennent de `SettingsNavigationStrings`, déjà traduits.
+
 Alternative : un nouvel enum d'actions propre aux gestes. Rejetée : duplication du sélecteur d'action et de la validation déjà écrits pour le menu radial.
 
 ### D5. Conflits système lus dans les préférences, jamais bloqués
@@ -70,6 +72,8 @@ Nouveau scope, clé `trackpadGestureExceptions`, UI `MouseExceptionsList(scope:)
 Frames sur le thread multitouch, machine à états sous un `NSLock` dans le service, décision émise puis `DispatchQueue.main.async` pour les exclusions, les réservations et l'exécution. Aucune lecture de préférence ni d'UI sur le thread multitouch.
 
 Révisé à l'implémentation : le service des gestes n'ouvre aucun tap d'événements. À la levée des doigts, il lit `CGEventSource.secondsSinceLastEventType(.combinedSessionState, …)` pour `keyDown` (frappe récente) et pour `leftMouseDown`, `rightMouseDown`, `otherMouseDown` (clic pendant le contact : un clic plus récent que la durée du contact annule le geste). C'est la même source que le contrôle de frappe existant du clic du milieu, sans tap supplémentaire à maintenir ni à réarmer. À confirmer sur Mac : qu'un clic physique transformé en clic du milieu est bien vu par cette lecture.
+
+Révisé après essai sur Mac : la frappe est lue dans `.hidSystemState` (événements matériels). Lue dans `.combinedSessionState`, elle comptait aussi le raccourci posté par l'action du geste précédent : sur une série rapide de balayages mappés sur Space précédent ou suivant, un geste sur deux était rejeté comme frappe récente. Les clics restent lus dans `.combinedSessionState`.
 
 ### D8. Réglages
 Carte « Gestes du trackpad » dans `MouseSettings` (ancre `.trackpadGestures`), avec un interrupteur, une liste de lignes par geste groupées par nombre de doigts (icône, nom, menu d'action, note « pris par macOS / clic du milieu / menu radial / action indisponible »), l'avertissement trackpad absent, puis `MouseExceptionsList`. Si la liste dépasse la carte, bascule vers une page dédiée ; décision prise sur capture d'écran, sans impact sur les specs.

@@ -7,7 +7,7 @@ Définir les actions qu'un geste du trackpad peut déclencher et leur effet obse
 ## ADDED Requirements
 
 ### Requirement: Catalogue d'actions
-Un geste DOIT pouvoir déclencher une action parmi : raccourci clavier, Space précédent, Space suivant, Mission Control, App Exposé, disposition de fenêtre, outil Vorssaint, bascule rapide, touche média, ouvrir une application, ouvrir une URL. Les actions proposées DOIVENT être les mêmes que celles d'une tranche du menu radial, plus les quatre actions de navigation.
+Un geste DOIT pouvoir déclencher une action parmi : raccourci clavier, Précédent, Suivant, Space précédent, Space suivant, Mission Control, App Exposé, disposition de fenêtre, outil Vorssaint, bascule rapide, touche média, ouvrir une application, ouvrir une URL. Les actions proposées DOIVENT être les mêmes que celles d'une tranche du menu radial, plus les quatre actions de navigation Spaces et les deux actions Précédent et Suivant.
 
 #### Scenario: Choix d'une action dans les réglages
 - **WHEN** l'utilisateur ouvre le sélecteur d'action d'un geste
@@ -34,6 +34,21 @@ Les actions Space précédent, Space suivant, Mission Control et App Exposé DOI
 #### Scenario: Raccourci système désactivé
 - **WHEN** l'utilisateur a désactivé le raccourci système de Mission Control
 - **THEN** l'action ne fait rien et les réglages indiquent que le raccourci système est requis
+
+### Requirement: Précédent et Suivant dans l'app au premier plan
+Les actions Précédent et Suivant DOIVENT agir sur l'application au premier plan comme le font les boutons latéraux de souris : sa commande de menu Précédent ou Suivant quand elle en a une, quel que soit le clavier, sinon le bouton latéral qu'une souris enverrait à la fenêtre sous le pointeur. Elles NE DOIVENT PAS dépendre de la feature des boutons latéraux.
+
+#### Scenario: App avec commande de menu
+- **WHEN** un geste mappé sur Précédent est effectué avec Safari ou le Finder au premier plan
+- **THEN** l'app revient à la page ou au dossier précédent, comme avec sa commande de menu
+
+#### Scenario: Navigateur sans commande de menu
+- **WHEN** un geste mappé sur Précédent est effectué avec un navigateur de la famille Firefox au premier plan, le pointeur sur sa fenêtre
+- **THEN** le navigateur revient à la page précédente
+
+#### Scenario: Rien à faire
+- **WHEN** la commande de l'app est désactivée, ou que le pointeur est sur la fenêtre d'une autre app qui n'a pas la commande
+- **THEN** rien ne se produit
 
 ### Requirement: Disposition de fenêtre
 L'action disposition DOIT appliquer la disposition choisie à la fenêtre au premier plan avec le même résultat que la feature Disposition des fenêtres.
