@@ -52,7 +52,9 @@ Conséquence : le reconnaisseur tourne dès que l'un des trois consommateurs le 
 ### D4. Actions : réutiliser `RadialMenuItem`, ajouter la navigation
 Le mappage persiste en `Data` JSON sous `DefaultsKey.trackpadGestureMappings` : `[gestureKey: TriggerAction]` où `TriggerAction` est un enum Codable `case item(RadialMenuItem)` et `case navigation(SpaceNavigation)` avec `spaceLeft, spaceRight, missionControl, appExpose`. Le sous-menu (`.submenu`) est exclu des gestes par sanitisation.
 
-Les exécuteurs `run(_ item:)`, `run(_ tool:)`, `run(_ toggle:)`, `run(_ layout:)`, `postShortcut`, `postAuxKey`, `postWhenModifiersReleased` quittent `RadialMenuService` pour `Services/TriggerActionRunner.swift` (enum statique, main thread). `RadialMenuService` l'appelle. La navigation passe par `SpaceWindowBridge`. `RadialMenuTool` gagne `commandBar` et `switcher` (le switcher reçoit une entrée publique `AppSwitcher.shared.togglePanel()`), ce qui bénéficie aussi au menu radial.
+Les exécuteurs `run(_ item:)`, `run(_ tool:)`, `run(_ toggle:)`, `run(_ layout:)`, `postShortcut`, `postAuxKey`, `postWhenModifiersReleased` quittent `RadialMenuService` pour `Services/TriggerActionRunner.swift` (enum statique, main thread). `RadialMenuService` l'appelle. La navigation passe par `SpaceWindowBridge`. `RadialMenuTool` gagne `commandBar`, ce qui bénéficie aussi au menu radial.
+
+Révisé à l'implémentation : le sélecteur d'apps n'est pas ajouté. Sa session est liée à un raccourci maintenu et se valide au relâchement des modificateurs ; l'ouvrir depuis un geste demande un mode de session persistant dans `AppSwitcher`, qui dépasse une simple entrée publique. Décision en attente du porteur du projet (voir Open Questions).
 
 Alternative : un nouvel enum d'actions propre aux gestes. Rejetée : duplication du sélecteur d'action et de la validation déjà écrits pour le menu radial.
 
@@ -65,10 +67,14 @@ Un geste pris reste mappable mais la ligne est marquée ; l'action s'exécute qu
 Nouveau scope, clé `trackpadGestureExceptions`, UI `MouseExceptionsList(scope:)`. Le test se fait sur l'app au premier plan (`excludesActionTarget`) au moment de la levée des doigts, sur le thread principal.
 
 ### D7. Threads et verrous
-Frames sur le thread multitouch, machine à états sous un `NSLock` dans le service, décision émise puis `DispatchQueue.main.async` pour les exclusions, les réservations et l'exécution. Aucune lecture de préférence ni d'UI sur le thread multitouch. Le clic physique continue d'être observé par le tap d'événements du clic du milieu ; `TrackpadTouchService` lui transmet le flag « bouton pressé pendant le contact » via un abonné interne, pour que les gestes soient annulés par un clic même quand le clic du milieu est désactivé : le service des gestes ouvre son propre tap d'écoute (`listenOnly`) sur `leftMouseDown/rightMouseDown`, hébergé sur `PointerTapRunLoop`, uniquement quand des mappages existent.
+Frames sur le thread multitouch, machine à états sous un `NSLock` dans le service, décision émise puis `DispatchQueue.main.async` pour les exclusions, les réservations et l'exécution. Aucune lecture de préférence ni d'UI sur le thread multitouch.
+
+Révisé à l'implémentation : le service des gestes n'ouvre aucun tap d'événements. À la levée des doigts, il lit `CGEventSource.secondsSinceLastEventType(.combinedSessionState, …)` pour `keyDown` (frappe récente) et pour `leftMouseDown`, `rightMouseDown`, `otherMouseDown` (clic pendant le contact : un clic plus récent que la durée du contact annule le geste). C'est la même source que le contrôle de frappe existant du clic du milieu, sans tap supplémentaire à maintenir ni à réarmer. À confirmer sur Mac : qu'un clic physique transformé en clic du milieu est bien vu par cette lecture.
 
 ### D8. Réglages
-Carte « Gestes du trackpad » dans `MouseSettings` (ancre `.trackpadGestures`), avec un interrupteur, une grille de lignes par geste (icône, nom, sélecteur d'action réutilisant le picker du menu radial factorisé en `TriggerActionPicker`, badge « pris par macOS / clic du milieu / menu radial »), les avertissements trackpad absent et raccourci système requis, puis `MouseExceptionsList`. Si la grille dépasse la carte, bascule vers une page dédiée ; décision prise lors de l'implémentation sur capture d'écran, sans impact sur les specs.
+Carte « Gestes du trackpad » dans `MouseSettings` (ancre `.trackpadGestures`), avec un interrupteur, une liste de lignes par geste groupées par nombre de doigts (icône, nom, menu d'action, note « pris par macOS / clic du milieu / menu radial / action indisponible »), l'avertissement trackpad absent, puis `MouseExceptionsList`. Si la liste dépasse la carte, bascule vers une page dédiée ; décision prise sur capture d'écran, sans impact sur les specs.
+
+Révisé à l'implémentation : plutôt qu'un nouveau `TriggerActionPicker`, l'éditeur d'action existant du menu radial (`RadialItemEditor`) passe de `private` à interne et sert tel quel en feuille, avec `allowsSubmenu: false`. Le menu de chaque ligne propose « Aucune action », les quatre navigations et « Autre action », qui ouvre cet éditeur. Les deux features partagent ainsi le même éditeur sans toucher à son code.
 
 ### D9. Tests
 Tout ce qui décide est pur : `TrackpadGestureSupport` (reconnaissance, réservations, claims système, encodage/décodage des mappages), `TriggerAction` (sanitisation), chaînes. Les suites vont dans `Tests/PointerInputFeatureTests.swift` (groupe `pointer-input`) et `Tests/LocalizationTests.swift` (fabrique ajoutée). Les fichiers sont ajoutés à `TEST_SOURCES` dans `build.sh`. Les comptes du catalogue dans `Tests/FeatureCatalogTests.swift` passent à 78.
@@ -90,6 +96,8 @@ Tout ce qui décide est pur : `TrackpadGestureSupport` (reconnaissance, réserva
 - Retour arrière : désinstaller la feature. Les mappages restent en préférences et sont ignorés.
 
 ## Open Questions
+
+- Sélecteur d'apps depuis un geste : ajouter un mode de session persistant à `AppSwitcher`, ou retirer le sélecteur du périmètre de la spec `trackpad-gesture-actions`. Bloque la tâche 3.4.
 
 - Carte dans la page Souris ou page dédiée : tranché à l'implémentation sur capture d'écran (D8), sans effet sur specs ni tâches.
 - Valeurs finales des seuils de balayage et de pincement : calibrées sur Mac (D2).

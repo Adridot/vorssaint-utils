@@ -86,7 +86,7 @@ Chaque geste reconnu DOIT pouvoir être associé à au plus une action du catalo
 - **THEN** les mappages de gestes sont restaurés et les entrées invalides sont ignorées
 
 ### Requirement: Exclusions par application
-L'utilisateur DOIT pouvoir lister des applications dans lesquelles aucun geste n'agit. L'application retenue est celle au premier plan au moment de la levée des doigts.
+L'utilisateur DOIT pouvoir lister des applications dans lesquelles aucun geste n'agit. Un geste n'agit pas quand l'application au premier plan ou celle sous le pointeur, au moment de la levée des doigts, est dans la liste, comme pour les raccourcis des boutons de souris.
 
 #### Scenario: App exclue au premier plan
 - **WHEN** une app de la liste d'exclusion est au premier plan et un geste mappé est effectué
