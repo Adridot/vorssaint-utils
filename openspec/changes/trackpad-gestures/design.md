@@ -65,6 +65,8 @@ Alternative : un nouvel enum d'actions propre aux gestes. Rejetée : duplication
 ### D5. Conflits système lus dans les préférences, jamais bloqués
 `TrackpadGestureSupport.systemClaims(prefs:)` est une fonction pure qui prend un dictionnaire de valeurs de préférences et renvoie `[gestureKey: SystemClaim]` avec le chemin Réglages Système. Le service lit les domaines `com.apple.AppleMultitouchTrackpad`, `com.apple.driver.AppleBluetoothMultitouch.trackpad` et `com.apple.dock` par `CFPreferencesCopyAppValue`, sur le thread principal, en cache 2 s comme le fait déjà le clic du milieu pour `TrackpadThreeFingerDrag`. Les clés exactes (`TrackpadThreeFingerHorizSwipeGesture`, `TrackpadFourFingerHorizSwipeGesture`, `TrackpadThreeFingerVertSwipeGesture`, `TrackpadFourFingerVertSwipeGesture`, `TrackpadFourFingerPinchGesture`, `TrackpadFiveFingerPinchGesture`, `TrackpadThreeFingerTapGesture`, `TrackpadThreeFingerDrag`, `showMissionControlGestureEnabled`, `showAppExposeGestureEnabled`, `showDesktopGestureEnabled`, `showLaunchpadGestureEnabled`) sont à confirmer sur Mac avec `defaults read` avant d'écrire les tests.
 
+Révisé après essai sur Mac : les balayages à cinq doigts ne sont pas libres. macOS répond à ses balayages à quatre doigts avec cinq doigts aussi (bureaux à l'horizontale et Mission Control vers le haut, observés sur macOS 27.0.1 ; App Exposé vers le bas déduit de la même règle). Ils suivent donc les réglages à quatre doigts dans `systemClaims`.
+
 Un geste pris reste mappable mais la ligne est marquée ; l'action s'exécute quand même si l'utilisateur insiste. Alternative : refuser le mappage. Rejetée, certains utilisateurs veulent les deux effets.
 
 ### D6. Exclusions par application via `MouseExceptionScope.trackpadGestures`
@@ -91,7 +93,7 @@ Tout ce qui décide est pur : `TrackpadGestureSupport` (reconnaissance, réserva
 
 - [Le struct de touche change sur une version de macOS] → lecture limitée à x/y avec vérification de plage, échec fermé par contact, feature inactive sans plantage ; `--selftest` ajoute un avertissement si les symboles manquent.
 - [Seuils de balayage et de pincement mal calibrés] → constantes nommées au même endroit, tests sur des trajectoires synthétiques, calibration sur Mac avant la PR avec les valeurs notées dans la PR.
-- [Double déclenchement avec un geste macOS] → marquage dans les réglages et chemin pour libérer le geste ; recommandation des gestes libres (5 doigts, tap 4 doigts) dans la description.
+- [Double déclenchement avec un geste macOS] → marquage dans les réglages et chemin pour libérer le geste ; recommandation des gestes libres (taps à 4 et 5 doigts, balayages dont le geste système est désactivé) dans la description.
 - [Régression du clic du milieu lors de l'extraction] → le tap d'événements et `actionForClick` ne bougent pas ; tests existants de `MiddleClickSupport` conservés ; vérification manuelle du clic 3 doigts, du tap 3/4 doigts et du tap menu radial avant et après.
 - [Le reconnaisseur tourne pour le menu radial même sans la feature gestes] → coût identique à aujourd'hui (le clic du milieu lisait déjà les frames) ; les mappages sont ignorés tant que la feature n'est pas installée.
 - [Aucune vérification possible dans cet environnement] → la PR devra être ouverte en brouillon avec la liste des vérifications restantes, puis complétée après essais sur Mac (macOS 14, 15, 26, trackpad intégré et Magic Trackpad).

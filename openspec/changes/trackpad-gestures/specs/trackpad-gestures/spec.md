@@ -103,6 +103,10 @@ Pour chaque geste que macOS reconnaît lui aussi, les réglages DOIVENT indiquer
 - **WHEN** le balayage horizontal à trois doigts est réglé sur Spaces dans Réglages Système
 - **THEN** la ligne « balayage 3 doigts gauche/droite » est marquée comme prise par macOS avec le chemin Réglages Système, Trackpad, Autres gestes
 
+#### Scenario: Balayages à cinq doigts
+- **WHEN** le balayage système à quatre doigts est actif sur un axe
+- **THEN** les balayages à cinq doigts du même axe sont marqués comme pris par macOS, qui y répond comme à quatre doigts
+
 #### Scenario: Glisser à trois doigts actif
 - **WHEN** le glisser à trois doigts d'Accessibilité est activé
 - **THEN** tous les gestes à trois doigts sont marqués comme pris par macOS et le chemin Accessibilité, Contrôle du pointeur, Options du trackpad est indiqué
