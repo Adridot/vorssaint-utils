@@ -269,6 +269,10 @@ enum PointerInputFeatureTests {
         suite.expect(clickDebounceRearm.contains("state.reset()")
                 && clickDebounceRearm.contains("SessionActivity.shared.isActive"),
                "click debounce resets before any safe tap re-arm")
+        // Its own stop switches the tap off, which the callback hears like a
+        // disable by the system; recovering from that undid suspend().
+        suite.expect(!clickDebounceRearm.contains("} else {"),
+               "click debounce leaves alone a tap its own stop switched off")
         suite.expect(clickDebounceServiceCode.contains(
             "recoveryGeneration == self.lifecycleGeneration"
         ), "click debounce drops disabled-tap recovery after a newer lifecycle change")
@@ -3498,6 +3502,20 @@ enum PointerInputFeatureTests {
                 || tapOwner.contains("ShortcutRecordingTap") {
                 suite.expect(rearm.contains("AXIsProcessTrusted()"),
                        "\(tapOwner) does not keep a modifying tap alive after Accessibility is lost")
+            }
+            // A tap served by its own thread is switched off by the main
+            // thread that stops it, and the callback hears that like a
+            // disable by the system. Syncing whenever there was no tap to
+            // re-arm started these again under Cleaning Mode and under a
+            // permission reset, so the sync has to be asked for by a tap
+            // still held, never by a bare else.
+            if tapOwner.contains("FinderCutPaste")
+                || tapOwner.contains("FinderRename")
+                || tapOwner.contains("KeyboardDebounce")
+                || tapOwner.contains("AppSwitcher")
+                || tapOwner.contains("TextSnippet") {
+                suite.expect(rearm.contains("syncWithPreferences()") && !rearm.contains("} else {"),
+                       "\(tapOwner) leaves alone a tap its own stop switched off")
             }
             // Switching a tap off leaves the process owning it, which is what
             // the window server waits on; teardown must invalidate the port,
