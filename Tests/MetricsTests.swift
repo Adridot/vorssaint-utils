@@ -33,6 +33,8 @@ struct MetricsTests {
                 KeyboardDebounceTapTests.run(suite)
                 PointerDisplayLookupContract.run(suite)
                 SuperKeyTapContract.run(suite)
+                TrackpadGestureTests.run(suite)
+                TrackpadGestureMappingTests.run(suite)
                 PointerScreenContract.run(suite)
             }),
             ("scroll-modifier", { ScrollHorizontalModifierTests.run(suite) }),
