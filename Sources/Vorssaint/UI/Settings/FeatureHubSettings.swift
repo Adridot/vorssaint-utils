@@ -1009,6 +1009,7 @@ extension AppFeature {
         case .mouseNavigation: return hub.titleMouseNavigation
         case .mouseButtonShortcuts: return FeatureStrings.mouseButtons(L10n.shared.language).pageTitle
         case .middleClick: return s.middleClickSection
+        case .trackpadGestures: return FeatureStrings.trackpadGestures(L10n.shared.language).title
         case .keyboardDebounce: return s.keyDebounceName
         case .textSnippets: return FeatureStrings.snippets(L10n.shared.language).pageTitle
         case .superKey: return FeatureStrings.superKey(L10n.shared.language).pageTitle
@@ -1093,6 +1094,7 @@ extension AppFeature {
         case .mouseNavigation: return hub.descMouseNavigation
         case .mouseButtonShortcuts: return FeatureStrings.mouseButtons(L10n.shared.language).hubDescription
         case .middleClick: return hub.descMiddleClick
+        case .trackpadGestures: return FeatureStrings.trackpadGestures(L10n.shared.language).hubDescription
         case .keyboardDebounce: return hub.descKeyboardDebounce
         case .textSnippets: return FeatureStrings.snippets(L10n.shared.language).hubDescription
         case .superKey: return FeatureStrings.superKey(L10n.shared.language).hubDescription
