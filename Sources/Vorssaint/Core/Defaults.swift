@@ -785,6 +785,7 @@ enum DefaultsKey {
     static let windowLayoutShortcutPreviousDisplay = "windowLayoutShortcutPreviousDisplay"
     static let windowLayoutShortcutNextDisplay = "windowLayoutShortcutNextDisplay"
     static let windowLayoutShortcutFullScreen = "windowLayoutShortcutFullScreen"
+    static let windowLayoutShortcutMinimize = "windowLayoutShortcutMinimize"
     static let windowLayoutShortcutTopLeftSixth = "windowLayoutShortcutTopLeftSixth"
     static let windowLayoutShortcutTopCenterSixth = "windowLayoutShortcutTopCenterSixth"
     static let windowLayoutShortcutTopRightSixth = "windowLayoutShortcutTopRightSixth"
@@ -1964,6 +1965,7 @@ enum Defaults {
         DefaultsKey.windowLayoutShortcutBottomCenterSixth: WindowLayoutAction.clearedShortcutStorageValue,
         DefaultsKey.windowLayoutShortcutBottomRightSixth: WindowLayoutAction.clearedShortcutStorageValue,
         DefaultsKey.windowLayoutShortcutFullScreen: WindowLayoutAction.clearedShortcutStorageValue,
+        DefaultsKey.windowLayoutShortcutMinimize: WindowLayoutAction.clearedShortcutStorageValue,
     ]
 
     static func register() {
